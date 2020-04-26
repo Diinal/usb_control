@@ -1,0 +1,20 @@
+C:\Users\Vily Fox\Documents\usb_control\USB Control\USB Control\bin\Debug\USB Control.exe.config
+C:\Users\Vily Fox\Documents\usb_control\USB Control\USB Control\bin\Debug\USB Control.exe
+C:\Users\Vily Fox\Documents\usb_control\USB Control\USB Control\bin\Debug\USB Control.pdb
+C:\Users\Vily Fox\Documents\usb_control\USB Control\USB Control\obj\Debug\USB Control.csprojAssemblyReference.cache
+C:\Users\Vily Fox\Documents\usb_control\USB Control\USB Control\obj\Debug\USB_Control.main_window.resources
+C:\Users\Vily Fox\Documents\usb_control\USB Control\USB Control\obj\Debug\USB_Control.Properties.Resources.resources
+C:\Users\Vily Fox\Documents\usb_control\USB Control\USB Control\obj\Debug\USB Control.csproj.GenerateResource.cache
+C:\Users\Vily Fox\Documents\usb_control\USB Control\USB Control\obj\Debug\USB Control.csproj.CoreCompileInputs.cache
+C:\Users\Vily Fox\Documents\usb_control\USB Control\USB Control\obj\Debug\USB Control.exe
+C:\Users\Vily Fox\Documents\usb_control\USB Control\USB Control\obj\Debug\USB Control.pdb
+C:\projects\usb_control\USB Control\USB Control\bin\Debug\USB Control.exe.config
+C:\projects\usb_control\USB Control\USB Control\bin\Debug\USB Control.exe
+C:\projects\usb_control\USB Control\USB Control\bin\Debug\USB Control.pdb
+C:\projects\usb_control\USB Control\USB Control\obj\Debug\USB Control.csprojAssemblyReference.cache
+C:\projects\usb_control\USB Control\USB Control\obj\Debug\USB_Control.main_window.resources
+C:\projects\usb_control\USB Control\USB Control\obj\Debug\USB_Control.Properties.Resources.resources
+C:\projects\usb_control\USB Control\USB Control\obj\Debug\USB Control.csproj.GenerateResource.cache
+C:\projects\usb_control\USB Control\USB Control\obj\Debug\USB Control.csproj.CoreCompileInputs.cache
+C:\projects\usb_control\USB Control\USB Control\obj\Debug\USB Control.exe
+C:\projects\usb_control\USB Control\USB Control\obj\Debug\USB Control.pdb

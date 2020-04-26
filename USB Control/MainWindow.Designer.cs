@@ -93,6 +93,7 @@
             this.current_connections.Name = "current_connections";
             this.current_connections.Size = new System.Drawing.Size(559, 76);
             this.current_connections.TabIndex = 4;
+            this.current_connections.SelectedIndexChanged += new System.EventHandler(this.current_connections_SelectedIndexChanged);
             // 
             // add_device
             // 

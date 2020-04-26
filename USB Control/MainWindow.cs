@@ -17,6 +17,9 @@ namespace USB_Control
 
     public partial class main_window : Form
     {
+        string curDeviceSelValue;
+        string whiteDeviceSelValue;
+
         public main_window()
         {
             InitializeComponent();
@@ -33,8 +36,8 @@ namespace USB_Control
             string[] current_devices = get_current_devices();
             current_connections.Items.AddRange(current_devices);
 
-            TimerCallback tm = new TimerCallback(monitoring);
-            System.Threading.Timer timer = new System.Threading.Timer(tm, 0, 0, 2000);
+            //TimerCallback tm = new TimerCallback(monitoring);
+           // System.Threading.Timer timer = new System.Threading.Timer(tm, 0, 0, 2000);
 
 
         }
@@ -82,6 +85,22 @@ namespace USB_Control
             return current_devices.ToArray();
         }
 
+        private RegistryKey get_key(RegistryKey parent, string keyname)
+        {
+            RegistryKey result;
+
+            if (parent.OpenSubKey(keyname, true) == null)
+            {
+                result = parent.CreateSubKey(keyname);
+            }
+            else
+            {
+                result = parent.OpenSubKey(keyname, true);
+            }
+            return result;
+        }
+    
+
         private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show(
@@ -112,16 +131,9 @@ namespace USB_Control
             }
 
             RegistryKey WinPolicies = rkLocalMachine.OpenSubKey(@"SOFTWARE\Policies\Microsoft\Windows", true);
-            if (WinPolicies.OpenSubKey("DeviceInstall", true) == null)
-            {
-                RegistryKey DeviceInstallRestrictions = WinPolicies.CreateSubKey("DeviceInstall").CreateSubKey("Restrictions");
-                DeviceInstallRestrictions.SetValue("DenyUnspecified", 1);
-            }
-            else
-            {
-                RegistryKey DeviceInstallRestrictions = WinPolicies.OpenSubKey("DeviceInstall", true).OpenSubKey("Restrictions", true);
-                DeviceInstallRestrictions.SetValue("DenyUnspecified", 1);
-            }
+            RegistryKey DeviceInstall = get_key(WinPolicies, "DeviceInstall");
+            RegistryKey DeviceInstallRestrictions = get_key(DeviceInstall, "Restrictions");
+            DeviceInstallRestrictions.SetValue("DenyUnspecified", 1);
 
 
         }
@@ -145,21 +157,40 @@ namespace USB_Control
             }
 
             RegistryKey WinPolicies = rkLocalMachine.OpenSubKey(@"SOFTWARE\Policies\Microsoft\Windows", true);
-            if (WinPolicies.OpenSubKey("DeviceInstall", true) == null)
-            {
-                RegistryKey DeviceInstallRestrictions = WinPolicies.CreateSubKey("DeviceInstall").CreateSubKey("Restrictions");
-                DeviceInstallRestrictions.SetValue("DenyUnspecified", 0);
-            }
-            else
-            {
-                RegistryKey DeviceInstallRestrictions = WinPolicies.OpenSubKey("DeviceInstall", true).OpenSubKey("Restrictions", true);
-                DeviceInstallRestrictions.SetValue("DenyUnspecified", 0);
-            }
+            RegistryKey DeviceInstall = get_key(WinPolicies, "DeviceInstall");
+            RegistryKey DeviceInstallRestrictions = get_key(DeviceInstall, "Restrictions");
+            DeviceInstallRestrictions.SetValue("DenyUnspecified", 0);
         }
 
         private void add_device_Click(object sender, EventArgs e)
         {
+            RegistryKey rkLocalMachine = Registry.LocalMachine;
+            RegistryKey WinPolicies = rkLocalMachine.OpenSubKey(@"SOFTWARE\Policies\Microsoft\Windows", true);
+            RegistryKey DeviceInstall = get_key(WinPolicies, "DeviceInstall");
+            RegistryKey DeviceInstallRestrictions = get_key(DeviceInstall, "Restrictions");
+            DeviceInstallRestrictions.SetValue("AllowDeviceIDs", white_list.Items.Count + 1);
 
+            RegistryKey AllowDeviceIDs = get_key(DeviceInstallRestrictions, "AllowDeviceIDs");
+            //Regex r = new Regex(@".*\\(.*)");
+            Match m = Regex.Match(curDeviceSelValue, @".*\\(.*)");
+            GroupCollection gc = m.Groups;
+            string DeviceID = gc[1].ToString();
+
+            AllowDeviceIDs.SetValue($"{white_list.Items.Count + 1}", m.ToString());
+            //USB\VID_1221&PID_3234\2019111315520281
+            white_list.Items.Clear();
+            //white_list.Items.AddRange(current_devices);
+
+        }
+
+        private void current_connections_Click(object sender, EventArgs e)
+        {
+            curDeviceSelValue = current_connections.SelectedValue.ToString();
+        }
+
+        private void current_connections_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            curDeviceSelValue = current_connections.SelectedItem.ToString();
         }
     }
 }

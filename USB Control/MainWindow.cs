@@ -37,28 +37,44 @@ namespace USB_Control
             current_connections.Items.AddRange(current_devices);
 
             //TimerCallback tm = new TimerCallback(monitoring);
-           // System.Threading.Timer timer = new System.Threading.Timer(tm, 0, 0, 2000);
-
+            //System.Threading.Timer timer = new System.Threading.Timer(tm, 0, 0, 2000);
+            Thread myThread = new Thread(monitoring);
+            myThread.Start();
 
         }
 
         private void monitoring(object obj)
         {
-            Thread.Sleep(1000);
-            Action action1 = () => current_connections.Items.Clear();
-            if (InvokeRequired)
-                Invoke(action1);
-            else
-                action1();
+            while (true)
+            {
+                Action clearItemsCurrent = () => current_connections.Items.Clear();
+                if (InvokeRequired)
+                    Invoke(clearItemsCurrent);
+                else
+                    clearItemsCurrent();
 
-            string[] current_devices = get_current_devices();
-            Console.WriteLine(current_devices.Length);
+                Action setNewRangeCurrent = () => current_connections.Items.AddRange(get_current_devices());
+                if (InvokeRequired)
+                    Invoke(setNewRangeCurrent);
+                else
+                    setNewRangeCurrent();
 
-            Action action2 = () => current_connections.Items.AddRange(current_devices);
-            if (InvokeRequired)
-                Invoke(action2);
-            else
-                action2();
+                Console.WriteLine(get_current_devices().Length);
+
+                Action clearItemsWhite = () => white_list.Items.Clear();
+                if (InvokeRequired)
+                    Invoke(clearItemsWhite);
+                else
+                    clearItemsWhite();
+
+                Action setNewRangeWhite = () => white_list.Items.AddRange(get_white_devices());
+                if (InvokeRequired)
+                    Invoke(setNewRangeWhite);
+                else
+                    setNewRangeWhite();
+
+                Thread.Sleep(1000);
+            }
 
         }
 
@@ -85,17 +101,44 @@ namespace USB_Control
             return current_devices.ToArray();
         }
 
-        private RegistryKey get_key(RegistryKey parent, string keyname)
+        private string[] get_white_devices()
+        {
+            RegistryKey rkLocalMachine = Registry.LocalMachine;
+            RegistryKey WinPolicies = rkLocalMachine.OpenSubKey(@"SOFTWARE\Policies\Microsoft\Windows", false);
+            RegistryKey DeviceInstall = get_key(WinPolicies, "DeviceInstall", false);
+            RegistryKey DeviceInstallRestrictions = get_key(DeviceInstall, "Restrictions", false);
+
+            List<string> white_devices = new List<string>();
+
+            if (int.Parse(DeviceInstallRestrictions.GetValue("AllowDeviceIDs").ToString()) > 0)
+            {
+                RegistryKey AllowDeviceIDs = DeviceInstallRestrictions.OpenSubKey("AllowDeviceIDs", false);
+
+                foreach (string valueName in AllowDeviceIDs.GetValueNames())
+                {
+                    Regex r = new Regex(@"\d"); // Соответствует любая цифра, восклицательный знак, решётка или буква h. Если нужны только цифры, то @"\d".
+                    Match m = r.Match(valueName);
+                    if (m.Success == true)
+                    {
+                        white_devices.Add(AllowDeviceIDs.GetValue(valueName).ToString());
+                    }
+                }
+            }
+
+            return white_devices.ToArray();
+        }
+
+        private RegistryKey get_key(RegistryKey parent, string keyname, bool writable = true)
         {
             RegistryKey result;
 
-            if (parent.OpenSubKey(keyname, true) == null)
+            if (parent.OpenSubKey(keyname, writable) == null)
             {
                 result = parent.CreateSubKey(keyname);
             }
             else
             {
-                result = parent.OpenSubKey(keyname, true);
+                result = parent.OpenSubKey(keyname, writable);
             }
             return result;
         }
@@ -168,29 +211,40 @@ namespace USB_Control
             RegistryKey WinPolicies = rkLocalMachine.OpenSubKey(@"SOFTWARE\Policies\Microsoft\Windows", true);
             RegistryKey DeviceInstall = get_key(WinPolicies, "DeviceInstall");
             RegistryKey DeviceInstallRestrictions = get_key(DeviceInstall, "Restrictions");
-            DeviceInstallRestrictions.SetValue("AllowDeviceIDs", white_list.Items.Count + 1);
+            DeviceInstallRestrictions.SetValue("AllowDeviceIDs", 1);
 
             RegistryKey AllowDeviceIDs = get_key(DeviceInstallRestrictions, "AllowDeviceIDs");
-            //Regex r = new Regex(@".*\\(.*)");
-            Match m = Regex.Match(curDeviceSelValue, @".*\\(.*)");
-            GroupCollection gc = m.Groups;
-            string DeviceID = gc[1].ToString();
 
-            AllowDeviceIDs.SetValue($"{white_list.Items.Count + 1}", m.ToString());
-            //USB\VID_1221&PID_3234\2019111315520281
+            string DeviceID = Regex.Match(curDeviceSelValue, @".*\\(.*)").Groups[1].ToString();
+
+            //добавить проверку наличия id в ключе
+            bool whiteDeviceExist = false;
+            foreach (string valueName in AllowDeviceIDs.GetValueNames())
+            {
+                if (AllowDeviceIDs.GetValue(valueName).ToString() == DeviceID)
+                {
+                    whiteDeviceExist = true;
+                }
+            }
+
+            if (whiteDeviceExist)
+            {
+                AllowDeviceIDs.SetValue($"{white_list.Items.Count + 1}", DeviceID);
+            }
+
             white_list.Items.Clear();
-            //white_list.Items.AddRange(current_devices);
+            white_list.Items.AddRange(get_white_devices());
 
-        }
-
-        private void current_connections_Click(object sender, EventArgs e)
-        {
-            curDeviceSelValue = current_connections.SelectedValue.ToString();
         }
 
         private void current_connections_SelectedIndexChanged(object sender, EventArgs e)
         {
             curDeviceSelValue = current_connections.SelectedItem.ToString();
+        }
+
+        private void white_list_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            whiteDeviceSelValue = white_list.SelectedItem.ToString();
         }
     }
 }

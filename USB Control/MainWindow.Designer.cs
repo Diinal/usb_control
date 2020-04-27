@@ -122,6 +122,7 @@
             this.white_list.Name = "white_list";
             this.white_list.Size = new System.Drawing.Size(559, 76);
             this.white_list.TabIndex = 7;
+            this.white_list.SelectedIndexChanged += new System.EventHandler(this.white_list_SelectedIndexChanged);
             // 
             // label3
             // 

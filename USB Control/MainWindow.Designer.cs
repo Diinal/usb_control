@@ -49,7 +49,7 @@
             this.оПрограммеToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(964, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1220, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -91,7 +91,7 @@
             this.current_connections.ItemHeight = 24;
             this.current_connections.Location = new System.Drawing.Point(21, 144);
             this.current_connections.Name = "current_connections";
-            this.current_connections.Size = new System.Drawing.Size(559, 76);
+            this.current_connections.Size = new System.Drawing.Size(758, 76);
             this.current_connections.TabIndex = 4;
             this.current_connections.SelectedIndexChanged += new System.EventHandler(this.current_connections_SelectedIndexChanged);
             // 
@@ -113,6 +113,7 @@
             this.delete_device.TabIndex = 6;
             this.delete_device.Text = "Удалить устройство";
             this.delete_device.UseVisualStyleBackColor = true;
+            this.delete_device.Click += new System.EventHandler(this.delete_device_Click);
             // 
             // white_list
             // 
@@ -120,7 +121,7 @@
             this.white_list.ItemHeight = 24;
             this.white_list.Location = new System.Drawing.Point(21, 269);
             this.white_list.Name = "white_list";
-            this.white_list.Size = new System.Drawing.Size(559, 76);
+            this.white_list.Size = new System.Drawing.Size(758, 76);
             this.white_list.TabIndex = 7;
             this.white_list.SelectedIndexChanged += new System.EventHandler(this.white_list_SelectedIndexChanged);
             // 
@@ -135,7 +136,7 @@
             // 
             // deny_connections
             // 
-            this.deny_connections.Location = new System.Drawing.Point(614, 144);
+            this.deny_connections.Location = new System.Drawing.Point(327, 26);
             this.deny_connections.Name = "deny_connections";
             this.deny_connections.Size = new System.Drawing.Size(156, 56);
             this.deny_connections.TabIndex = 9;
@@ -145,7 +146,7 @@
             // 
             // allow_connections
             // 
-            this.allow_connections.Location = new System.Drawing.Point(614, 269);
+            this.allow_connections.Location = new System.Drawing.Point(523, 24);
             this.allow_connections.Name = "allow_connections";
             this.allow_connections.Size = new System.Drawing.Size(156, 60);
             this.allow_connections.TabIndex = 10;
@@ -157,7 +158,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(964, 461);
+            this.ClientSize = new System.Drawing.Size(1220, 546);
             this.Controls.Add(this.allow_connections);
             this.Controls.Add(this.deny_connections);
             this.Controls.Add(this.label3);

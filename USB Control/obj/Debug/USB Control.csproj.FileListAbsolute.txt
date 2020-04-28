@@ -28,3 +28,6 @@ C:\projects\USBControl\usb_control\USB Control\obj\Debug\USB Control.csproj.Gene
 C:\projects\USBControl\usb_control\USB Control\obj\Debug\USB Control.csproj.CoreCompileInputs.cache
 C:\projects\USBControl\usb_control\USB Control\obj\Debug\USB Control.exe
 C:\projects\USBControl\usb_control\USB Control\obj\Debug\USB Control.pdb
+C:\projects\USBControl\usb_control\USB Control\bin\Debug\System.ValueTuple.dll
+C:\projects\USBControl\usb_control\USB Control\bin\Debug\System.ValueTuple.xml
+C:\projects\USBControl\usb_control\USB Control\obj\Debug\USB Control.csproj.CopyComplete

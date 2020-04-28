@@ -33,8 +33,8 @@ namespace USB_Control
             //rkLocalMachine.DeleteSubKeyTree(@"SYSTEM\CurrentControlSet\Enum\USBSTOR");
 
 
-            string[] current_devices = get_current_devices();
-            current_connections.Items.AddRange(current_devices);
+            var current_devices = get_current_devices();
+            current_connections.Items.AddRange(current_devices.ToArray());
 
             //TimerCallback tm = new TimerCallback(monitoring);
             //System.Threading.Timer timer = new System.Threading.Timer(tm, 0, 0, 2000);
@@ -47,27 +47,56 @@ namespace USB_Control
         {
             while (true)
             {
-                Action clearItemsCurrent = () => current_connections.Items.Clear();
+                var currentDevices = get_current_devices();
+
+                //Action clearItemsCurrent = () => current_connections.Items.Clear();
+                Action clearItemsCurrent = () => {
+                    if (!IfEqual(current_connections.Items.Cast<string>().ToList(), currentDevices))
+                    {
+                        current_connections.Items.Clear();
+                    }
+                };
                 if (InvokeRequired)
                     Invoke(clearItemsCurrent);
                 else
                     clearItemsCurrent();
 
-                Action setNewRangeCurrent = () => current_connections.Items.AddRange(get_current_devices());
+                //Action setNewRangeCurrent = () => current_connections.Items.AddRange(currentDevices);
+                Action setNewRangeCurrent = () => {
+                    if (!IfEqual(current_connections.Items.Cast<string>().ToList(), currentDevices))
+                    {
+                        current_connections.Items.AddRange(currentDevices.ToArray());
+                    }
+                };
                 if (InvokeRequired)
                     Invoke(setNewRangeCurrent);
                 else
                     setNewRangeCurrent();
 
-                Console.WriteLine(get_current_devices().Length);
+                //Console.WriteLine(currentDevices.Length);
 
-                Action clearItemsWhite = () => white_list.Items.Clear();
+                var whiteDevices = get_white_devices();
+                //Action clearItemsWhite = () => white_list.Items.Clear();
+                Action clearItemsWhite = () =>
+                {
+                    if (!IfEqual(white_list.Items.Cast<string>().ToList(), whiteDevices))
+                    {
+                        white_list.Items.Clear();
+                    }
+                };
                 if (InvokeRequired)
                     Invoke(clearItemsWhite);
                 else
                     clearItemsWhite();
 
-                Action setNewRangeWhite = () => white_list.Items.AddRange(get_white_devices());
+                //Action setNewRangeWhite = () => white_list.Items.AddRange(get_white_devices());
+                Action setNewRangeWhite = () =>
+                {
+                    if (!IfEqual(white_list.Items.Cast<string>().ToList(), whiteDevices))
+                    {
+                        white_list.Items.AddRange(whiteDevices.ToArray());
+                    }
+                };
                 if (InvokeRequired)
                     Invoke(setNewRangeWhite);
                 else
@@ -78,54 +107,66 @@ namespace USB_Control
 
         }
 
-        private string[] get_current_devices()
+        bool IfEqual(List<string> list1, List<string> list2)
+        {
+            var diff1 = list1.Except(list2);
+            var diff2 = list2.Except(list1);
+
+            return !diff1.Any() && !diff2.Any();
+        }
+
+        private List<string> get_current_devices()
         {
             RegistryKey rkLocalMachine = Registry.LocalMachine;
-            RegistryKey enums = rkLocalMachine.OpenSubKey("SYSTEM", false).OpenSubKey("CurrentControlSet", false).OpenSubKey("Services", false).OpenSubKey("USBSTOR", false).OpenSubKey("Enum", false);
+            //RegistryKey enums = rkLocalMachine.OpenSubKey("SYSTEM", false).OpenSubKey("CurrentControlSet", false).OpenSubKey("Services", false).OpenSubKey("USBSTOR", false).OpenSubKey("Enum", false);
+            RegistryKey enums = rkLocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services\disk\Enum");
             List<string> current_devices = new List<string>();
             //string[] current_devices = enums.GetValueNames();
 
-            if (int.Parse(enums.GetValue("Count").ToString()) > 0)
+            foreach (string valueName in enums.GetValueNames())
             {
-                foreach (string valueName in enums.GetValueNames())
+                Regex r = new Regex(@"USBSTOR\\.*\\.*");
+                Match m = r.Match(enums.GetValue(valueName).ToString());
+                //Match m = r.Match(valueName);
+                if (m.Success == true)
                 {
-                    Regex r = new Regex(@"\d"); // Соответствует любая цифра, восклицательный знак, решётка или буква h. Если нужны только цифры, то @"\d".
-                    Match m = r.Match(valueName);
-                    if (m.Success == true)
-                    {
-                        current_devices.Add(enums.GetValue(valueName).ToString());
-                    }
+                    current_devices.Add(enums.GetValue(valueName).ToString());
                 }
             }
 
-            return current_devices.ToArray();
+            return current_devices;
         }
 
-        private string[] get_white_devices()
+        private List<string> get_white_devices()
         {
             RegistryKey rkLocalMachine = Registry.LocalMachine;
             RegistryKey WinPolicies = rkLocalMachine.OpenSubKey(@"SOFTWARE\Policies\Microsoft\Windows", false);
-            RegistryKey DeviceInstall = get_key(WinPolicies, "DeviceInstall", false);
-            RegistryKey DeviceInstallRestrictions = get_key(DeviceInstall, "Restrictions", false);
+            //RegistryKey DeviceInstall = get_key(WinPolicies, "DeviceInstall", false);
+            //RegistryKey DeviceInstallRestrictions = get_key(DeviceInstall, "Restrictions", false);
+            RegistryKey DeviceInstallRestrictions = WinPolicies.OpenSubKey(@"DeviceInstall\Restrictions");
 
             List<string> white_devices = new List<string>();
 
-            if (int.Parse(DeviceInstallRestrictions.GetValue("AllowDeviceIDs").ToString()) > 0)
+            if (DeviceInstallRestrictions != null && int.Parse(DeviceInstallRestrictions.GetValue("AllowInstanceIDs").ToString()) == 1)
             {
-                RegistryKey AllowDeviceIDs = DeviceInstallRestrictions.OpenSubKey("AllowDeviceIDs", false);
+                RegistryKey AllowInstanceIDs = DeviceInstallRestrictions.OpenSubKey("AllowInstanceIDs", false);
 
-                foreach (string valueName in AllowDeviceIDs.GetValueNames())
+                if (AllowInstanceIDs != null)
                 {
-                    Regex r = new Regex(@"\d"); // Соответствует любая цифра, восклицательный знак, решётка или буква h. Если нужны только цифры, то @"\d".
-                    Match m = r.Match(valueName);
-                    if (m.Success == true)
+                    foreach (string valueName in AllowInstanceIDs.GetValueNames())
                     {
-                        white_devices.Add(AllowDeviceIDs.GetValue(valueName).ToString());
+                        Regex r = new Regex(@"\d"); // Соответствует любая цифра, восклицательный знак, решётка или буква h. Если нужны только цифры, то @"\d".
+                        Match m = r.Match(valueName);
+                        if (m.Success == true)
+                        {
+                            var a = AllowInstanceIDs.GetValue(valueName).ToString();
+                            white_devices.Add(AllowInstanceIDs.GetValue(valueName).ToString());
+                        }
                     }
                 }
             }
 
-            return white_devices.ToArray();
+            return white_devices;
         }
 
         private RegistryKey get_key(RegistryKey parent, string keyname, bool writable = true)
@@ -211,30 +252,53 @@ namespace USB_Control
             RegistryKey WinPolicies = rkLocalMachine.OpenSubKey(@"SOFTWARE\Policies\Microsoft\Windows", true);
             RegistryKey DeviceInstall = get_key(WinPolicies, "DeviceInstall");
             RegistryKey DeviceInstallRestrictions = get_key(DeviceInstall, "Restrictions");
-            DeviceInstallRestrictions.SetValue("AllowDeviceIDs", 1);
+            DeviceInstallRestrictions.SetValue("AllowInstanceIDs", 1);
 
-            RegistryKey AllowDeviceIDs = get_key(DeviceInstallRestrictions, "AllowDeviceIDs");
+            RegistryKey AllowInstanceIDs = get_key(DeviceInstallRestrictions, "AllowInstanceIDs");
 
-            string DeviceID = Regex.Match(curDeviceSelValue, @".*\\(.*)").Groups[1].ToString();
-
+            //string DeviceInstanceID = Regex.Match(curDeviceSelValue, @".*\\(.*)").Groups[1].ToString();
+            string DeviceInstanceID = curDeviceSelValue;
             //добавить проверку наличия id в ключе
             bool whiteDeviceExist = false;
-            foreach (string valueName in AllowDeviceIDs.GetValueNames())
+            foreach (string valueName in AllowInstanceIDs.GetValueNames())
             {
-                if (AllowDeviceIDs.GetValue(valueName).ToString() == DeviceID)
+                if (AllowInstanceIDs.GetValue(valueName).ToString() == DeviceInstanceID)
                 {
                     whiteDeviceExist = true;
                 }
             }
 
-            if (whiteDeviceExist)
+            if (!whiteDeviceExist)
             {
-                AllowDeviceIDs.SetValue($"{white_list.Items.Count + 1}", DeviceID);
+                AllowInstanceIDs.SetValue($"{white_list.Items.Count + 1}", DeviceInstanceID);
             }
 
             white_list.Items.Clear();
-            white_list.Items.AddRange(get_white_devices());
+            white_list.Items.AddRange(get_white_devices().ToArray());
 
+        }
+
+        private void delete_device_Click(object sender, EventArgs e)
+        {
+            if (get_white_devices().ToArray().Length > 0) {
+                RegistryKey rkLocalMachine = Registry.LocalMachine;
+                RegistryKey WinPolicies = rkLocalMachine.OpenSubKey(@"SOFTWARE\Policies\Microsoft\Windows", true);
+                RegistryKey DeviceInstall = get_key(WinPolicies, "DeviceInstall");
+                RegistryKey DeviceInstallRestrictions = get_key(DeviceInstall, "Restrictions");
+                DeviceInstallRestrictions.SetValue("AllowInstanceIDs", 1);
+
+                RegistryKey AllowInstanceIDs = get_key(DeviceInstallRestrictions, "AllowInstanceIDs");
+                string DeviceInstanceID = whiteDeviceSelValue;
+
+                foreach (string valueName in AllowInstanceIDs.GetValueNames())
+                {
+                    if (AllowInstanceIDs.GetValue(valueName).ToString() == DeviceInstanceID)
+                    {
+                        AllowInstanceIDs.DeleteValue(valueName);
+                    }
+                }
+
+            }
         }
 
         private void current_connections_SelectedIndexChanged(object sender, EventArgs e)
@@ -246,5 +310,6 @@ namespace USB_Control
         {
             whiteDeviceSelValue = white_list.SelectedItem.ToString();
         }
+
     }
 }

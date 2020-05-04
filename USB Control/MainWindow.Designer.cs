@@ -37,8 +37,6 @@
             this.delete_device = new System.Windows.Forms.Button();
             this.white_list = new System.Windows.Forms.ListBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.deny_connections = new System.Windows.Forms.Button();
-            this.allow_connections = new System.Windows.Forms.Button();
             this.SourceField = new System.Windows.Forms.ListBox();
             this.labelSource = new System.Windows.Forms.Label();
             this.openFileButtonSource = new System.Windows.Forms.Button();
@@ -53,6 +51,8 @@
             this.KeyLabel = new System.Windows.Forms.Label();
             this.buttonClearSource = new System.Windows.Forms.Button();
             this.buttonClearDestinations = new System.Windows.Forms.Button();
+            this.radioButtonAllow = new System.Windows.Forms.RadioButton();
+            this.radioButtonDeny = new System.Windows.Forms.RadioButton();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -76,11 +76,11 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 27);
+            this.label2.Location = new System.Drawing.Point(8, 37);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(173, 24);
+            this.label2.Size = new System.Drawing.Size(254, 24);
             this.label2.TabIndex = 3;
-            this.label2.Text = "Connected devices";
+            this.label2.Text = "Подключенные устройства";
             // 
             // current_connections
             // 
@@ -94,7 +94,7 @@
             // 
             // add_device
             // 
-            this.add_device.Location = new System.Drawing.Point(122, 162);
+            this.add_device.Location = new System.Drawing.Point(282, 162);
             this.add_device.Name = "add_device";
             this.add_device.Size = new System.Drawing.Size(233, 31);
             this.add_device.TabIndex = 5;
@@ -104,7 +104,7 @@
             // 
             // delete_device
             // 
-            this.delete_device.Location = new System.Drawing.Point(373, 162);
+            this.delete_device.Location = new System.Drawing.Point(543, 162);
             this.delete_device.Name = "delete_device";
             this.delete_device.Size = new System.Drawing.Size(227, 31);
             this.delete_device.TabIndex = 6;
@@ -127,29 +127,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(8, 169);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(84, 24);
+            this.label3.Size = new System.Drawing.Size(135, 24);
             this.label3.TabIndex = 8;
-            this.label3.Text = "White list";
-            // 
-            // deny_connections
-            // 
-            this.deny_connections.Location = new System.Drawing.Point(867, 66);
-            this.deny_connections.Name = "deny_connections";
-            this.deny_connections.Size = new System.Drawing.Size(156, 56);
-            this.deny_connections.TabIndex = 9;
-            this.deny_connections.Text = "Запретить подключения";
-            this.deny_connections.UseVisualStyleBackColor = true;
-            this.deny_connections.Click += new System.EventHandler(this.deny_connections_Click);
-            // 
-            // allow_connections
-            // 
-            this.allow_connections.Location = new System.Drawing.Point(867, 160);
-            this.allow_connections.Name = "allow_connections";
-            this.allow_connections.Size = new System.Drawing.Size(156, 60);
-            this.allow_connections.TabIndex = 10;
-            this.allow_connections.Text = "Разрешить подключения";
-            this.allow_connections.UseVisualStyleBackColor = true;
-            this.allow_connections.Click += new System.EventHandler(this.allow_connections_Click);
+            this.label3.Text = "Белый список";
             // 
             // SourceField
             // 
@@ -160,17 +140,15 @@
             this.SourceField.Name = "SourceField";
             this.SourceField.Size = new System.Drawing.Size(758, 100);
             this.SourceField.TabIndex = 11;
-            this.SourceField.DragDrop += new System.Windows.Forms.DragEventHandler(this.dropField_DragDrop);
-            this.SourceField.DragEnter += new System.Windows.Forms.DragEventHandler(this.dropField_DragEnter);
             // 
             // labelSource
             // 
             this.labelSource.AutoSize = true;
-            this.labelSource.Location = new System.Drawing.Point(8, 301);
+            this.labelSource.Location = new System.Drawing.Point(8, 292);
             this.labelSource.Name = "labelSource";
-            this.labelSource.Size = new System.Drawing.Size(120, 24);
+            this.labelSource.Size = new System.Drawing.Size(368, 24);
             this.labelSource.TabIndex = 12;
-            this.labelSource.Text = "Source items";
+            this.labelSource.Text = "Файлы для шифрования/дешифрования";
             // 
             // openFileButtonSource
             // 
@@ -178,9 +156,9 @@
             this.openFileButtonSource.Name = "openFileButtonSource";
             this.openFileButtonSource.Size = new System.Drawing.Size(161, 36);
             this.openFileButtonSource.TabIndex = 13;
-            this.openFileButtonSource.Text = "Open File";
+            this.openFileButtonSource.Text = "Выбрать файл";
             this.openFileButtonSource.UseVisualStyleBackColor = true;
-            this.openFileButtonSource.Click += new System.EventHandler(this.button1_Click);
+            this.openFileButtonSource.Click += new System.EventHandler(this.openFileButtonSource_Click);
             // 
             // openFileDialog
             // 
@@ -189,11 +167,11 @@
             // 
             // encryptButton
             // 
-            this.encryptButton.Location = new System.Drawing.Point(494, 443);
+            this.encryptButton.Location = new System.Drawing.Point(310, 588);
             this.encryptButton.Name = "encryptButton";
-            this.encryptButton.Size = new System.Drawing.Size(135, 36);
+            this.encryptButton.Size = new System.Drawing.Size(161, 36);
             this.encryptButton.TabIndex = 15;
-            this.encryptButton.Text = "Encrypt";
+            this.encryptButton.Text = "Зашифровать";
             this.encryptButton.UseVisualStyleBackColor = true;
             this.encryptButton.Click += new System.EventHandler(this.encryptButton_Click);
             // 
@@ -201,7 +179,7 @@
             // 
             this.DestinationField.FormattingEnabled = true;
             this.DestinationField.ItemHeight = 24;
-            this.DestinationField.Location = new System.Drawing.Point(12, 485);
+            this.DestinationField.Location = new System.Drawing.Point(12, 481);
             this.DestinationField.Name = "DestinationField";
             this.DestinationField.Size = new System.Drawing.Size(758, 100);
             this.DestinationField.TabIndex = 16;
@@ -209,47 +187,48 @@
             // destinationLabel
             // 
             this.destinationLabel.AutoSize = true;
-            this.destinationLabel.Location = new System.Drawing.Point(8, 458);
+            this.destinationLabel.Location = new System.Drawing.Point(12, 445);
             this.destinationLabel.Name = "destinationLabel";
-            this.destinationLabel.Size = new System.Drawing.Size(151, 24);
+            this.destinationLabel.Size = new System.Drawing.Size(459, 24);
             this.destinationLabel.TabIndex = 17;
-            this.destinationLabel.Text = "Destination items";
+            this.destinationLabel.Text = "Папка для шифрованных/дешифрованных файлов";
             // 
             // DecryptButton
             // 
-            this.DecryptButton.Location = new System.Drawing.Point(635, 443);
+            this.DecryptButton.Location = new System.Drawing.Point(496, 588);
             this.DecryptButton.Name = "DecryptButton";
-            this.DecryptButton.Size = new System.Drawing.Size(135, 36);
+            this.DecryptButton.Size = new System.Drawing.Size(161, 36);
             this.DecryptButton.TabIndex = 18;
-            this.DecryptButton.Text = "Decrypt";
+            this.DecryptButton.Text = "Дешифровать";
             this.DecryptButton.UseVisualStyleBackColor = true;
             this.DecryptButton.Click += new System.EventHandler(this.DecryptButton_Click);
             // 
             // openFolderButtonDestination
             // 
-            this.openFolderButtonDestination.Location = new System.Drawing.Point(785, 485);
+            this.openFolderButtonDestination.Location = new System.Drawing.Point(785, 481);
             this.openFolderButtonDestination.Name = "openFolderButtonDestination";
             this.openFolderButtonDestination.Size = new System.Drawing.Size(161, 36);
             this.openFolderButtonDestination.TabIndex = 20;
-            this.openFolderButtonDestination.Text = "Open Folder";
+            this.openFolderButtonDestination.Text = "Выбрать папку";
             this.openFolderButtonDestination.UseVisualStyleBackColor = true;
             this.openFolderButtonDestination.Click += new System.EventHandler(this.openFolderButtonDestination_Click);
             // 
             // KeyTextBox
             // 
-            this.KeyTextBox.Location = new System.Drawing.Point(282, 446);
+            this.KeyTextBox.Location = new System.Drawing.Point(88, 591);
             this.KeyTextBox.Name = "KeyTextBox";
             this.KeyTextBox.Size = new System.Drawing.Size(188, 29);
             this.KeyTextBox.TabIndex = 21;
+            this.KeyTextBox.Enter += new System.EventHandler(this.KeyTextBox_Enter);
             // 
             // KeyLabel
             // 
             this.KeyLabel.AutoSize = true;
-            this.KeyLabel.Location = new System.Drawing.Point(224, 449);
+            this.KeyLabel.Location = new System.Drawing.Point(12, 594);
             this.KeyLabel.Name = "KeyLabel";
-            this.KeyLabel.Size = new System.Drawing.Size(47, 24);
+            this.KeyLabel.Size = new System.Drawing.Size(61, 24);
             this.KeyLabel.TabIndex = 22;
-            this.KeyLabel.Text = "Key:";
+            this.KeyLabel.Text = "Ключ:";
             // 
             // buttonClearSource
             // 
@@ -257,19 +236,43 @@
             this.buttonClearSource.Name = "buttonClearSource";
             this.buttonClearSource.Size = new System.Drawing.Size(161, 36);
             this.buttonClearSource.TabIndex = 23;
-            this.buttonClearSource.Text = "Clear";
+            this.buttonClearSource.Text = "Очистить";
             this.buttonClearSource.UseVisualStyleBackColor = true;
             this.buttonClearSource.Click += new System.EventHandler(this.buttonClearSource_Click);
             // 
             // buttonClearDestinations
             // 
-            this.buttonClearDestinations.Location = new System.Drawing.Point(785, 549);
+            this.buttonClearDestinations.Location = new System.Drawing.Point(785, 545);
             this.buttonClearDestinations.Name = "buttonClearDestinations";
             this.buttonClearDestinations.Size = new System.Drawing.Size(161, 36);
             this.buttonClearDestinations.TabIndex = 24;
-            this.buttonClearDestinations.Text = "Clear";
+            this.buttonClearDestinations.Text = "Очистить";
             this.buttonClearDestinations.UseVisualStyleBackColor = true;
             this.buttonClearDestinations.Click += new System.EventHandler(this.buttonClearDestinations_Click);
+            // 
+            // radioButtonAllow
+            // 
+            this.radioButtonAllow.AutoSize = true;
+            this.radioButtonAllow.Location = new System.Drawing.Point(785, 73);
+            this.radioButtonAllow.Name = "radioButtonAllow";
+            this.radioButtonAllow.Size = new System.Drawing.Size(253, 28);
+            this.radioButtonAllow.TabIndex = 25;
+            this.radioButtonAllow.TabStop = true;
+            this.radioButtonAllow.Text = "Разрешить подключения";
+            this.radioButtonAllow.UseVisualStyleBackColor = true;
+            this.radioButtonAllow.CheckedChanged += new System.EventHandler(this.radioButtonConnections_CheckedChanged);
+            // 
+            // radioButtonDeny
+            // 
+            this.radioButtonDeny.AutoSize = true;
+            this.radioButtonDeny.Location = new System.Drawing.Point(785, 107);
+            this.radioButtonDeny.Name = "radioButtonDeny";
+            this.radioButtonDeny.Size = new System.Drawing.Size(251, 28);
+            this.radioButtonDeny.TabIndex = 26;
+            this.radioButtonDeny.TabStop = true;
+            this.radioButtonDeny.Text = "Запретить подключения";
+            this.radioButtonDeny.UseVisualStyleBackColor = true;
+            this.radioButtonDeny.CheckedChanged += new System.EventHandler(this.radioButtonConnections_CheckedChanged);
             // 
             // main_window
             // 
@@ -277,6 +280,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1069, 635);
+            this.Controls.Add(this.radioButtonDeny);
+            this.Controls.Add(this.radioButtonAllow);
             this.Controls.Add(this.buttonClearDestinations);
             this.Controls.Add(this.buttonClearSource);
             this.Controls.Add(this.KeyLabel);
@@ -289,8 +294,6 @@
             this.Controls.Add(this.openFileButtonSource);
             this.Controls.Add(this.labelSource);
             this.Controls.Add(this.SourceField);
-            this.Controls.Add(this.allow_connections);
-            this.Controls.Add(this.deny_connections);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.white_list);
             this.Controls.Add(this.delete_device);
@@ -299,6 +302,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(6);
@@ -323,8 +327,6 @@
         private System.Windows.Forms.Button delete_device;
         private System.Windows.Forms.ListBox white_list;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button deny_connections;
-        private System.Windows.Forms.Button allow_connections;
         private System.Windows.Forms.ListBox SourceField;
         private System.Windows.Forms.Label labelSource;
         private System.Windows.Forms.Button openFileButtonSource;
@@ -339,6 +341,8 @@
         private System.Windows.Forms.Label KeyLabel;
         private System.Windows.Forms.Button buttonClearSource;
         private System.Windows.Forms.Button buttonClearDestinations;
+        private System.Windows.Forms.RadioButton radioButtonAllow;
+        private System.Windows.Forms.RadioButton radioButtonDeny;
     }
 }
 

@@ -22,7 +22,6 @@ C:\projects\USBControl\usb_control\USB Control\bin\Debug\USB Control.exe.config
 C:\projects\USBControl\usb_control\USB Control\bin\Debug\USB Control.exe
 C:\projects\USBControl\usb_control\USB Control\bin\Debug\USB Control.pdb
 C:\projects\USBControl\usb_control\USB Control\obj\Debug\USB Control.csprojAssemblyReference.cache
-C:\projects\USBControl\usb_control\USB Control\obj\Debug\USB_Control.main_window.resources
 C:\projects\USBControl\usb_control\USB Control\obj\Debug\USB_Control.Properties.Resources.resources
 C:\projects\USBControl\usb_control\USB Control\obj\Debug\USB Control.csproj.GenerateResource.cache
 C:\projects\USBControl\usb_control\USB Control\obj\Debug\USB Control.csproj.CoreCompileInputs.cache
@@ -31,3 +30,4 @@ C:\projects\USBControl\usb_control\USB Control\obj\Debug\USB Control.pdb
 C:\projects\USBControl\usb_control\USB Control\bin\Debug\System.ValueTuple.dll
 C:\projects\USBControl\usb_control\USB Control\bin\Debug\System.ValueTuple.xml
 C:\projects\USBControl\usb_control\USB Control\obj\Debug\USB Control.csproj.CopyComplete
+C:\projects\USBControl\usb_control\USB Control\obj\Debug\USB_Control.main_window.resources

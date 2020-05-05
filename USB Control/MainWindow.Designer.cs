@@ -53,6 +53,7 @@
             this.buttonClearDestinations = new System.Windows.Forms.Button();
             this.radioButtonAllow = new System.Windows.Forms.RadioButton();
             this.radioButtonDeny = new System.Windows.Forms.RadioButton();
+            this.CreateCryptoDevice = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -62,7 +63,7 @@
             this.оПрограммеToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1069, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1007, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -88,13 +89,13 @@
             this.current_connections.ItemHeight = 24;
             this.current_connections.Location = new System.Drawing.Point(12, 73);
             this.current_connections.Name = "current_connections";
-            this.current_connections.Size = new System.Drawing.Size(758, 76);
+            this.current_connections.Size = new System.Drawing.Size(800, 76);
             this.current_connections.TabIndex = 4;
             this.current_connections.SelectedIndexChanged += new System.EventHandler(this.current_connections_SelectedIndexChanged);
             // 
             // add_device
             // 
-            this.add_device.Location = new System.Drawing.Point(282, 162);
+            this.add_device.Location = new System.Drawing.Point(310, 162);
             this.add_device.Name = "add_device";
             this.add_device.Size = new System.Drawing.Size(233, 31);
             this.add_device.TabIndex = 5;
@@ -104,7 +105,7 @@
             // 
             // delete_device
             // 
-            this.delete_device.Location = new System.Drawing.Point(543, 162);
+            this.delete_device.Location = new System.Drawing.Point(585, 162);
             this.delete_device.Name = "delete_device";
             this.delete_device.Size = new System.Drawing.Size(227, 31);
             this.delete_device.TabIndex = 6;
@@ -118,7 +119,7 @@
             this.white_list.ItemHeight = 24;
             this.white_list.Location = new System.Drawing.Point(12, 206);
             this.white_list.Name = "white_list";
-            this.white_list.Size = new System.Drawing.Size(758, 76);
+            this.white_list.Size = new System.Drawing.Size(800, 76);
             this.white_list.TabIndex = 7;
             this.white_list.SelectedIndexChanged += new System.EventHandler(this.white_list_SelectedIndexChanged);
             // 
@@ -138,7 +139,7 @@
             this.SourceField.ItemHeight = 24;
             this.SourceField.Location = new System.Drawing.Point(12, 328);
             this.SourceField.Name = "SourceField";
-            this.SourceField.Size = new System.Drawing.Size(758, 100);
+            this.SourceField.Size = new System.Drawing.Size(800, 100);
             this.SourceField.TabIndex = 11;
             // 
             // labelSource
@@ -152,7 +153,7 @@
             // 
             // openFileButtonSource
             // 
-            this.openFileButtonSource.Location = new System.Drawing.Point(785, 328);
+            this.openFileButtonSource.Location = new System.Drawing.Point(836, 328);
             this.openFileButtonSource.Name = "openFileButtonSource";
             this.openFileButtonSource.Size = new System.Drawing.Size(161, 36);
             this.openFileButtonSource.TabIndex = 13;
@@ -167,7 +168,7 @@
             // 
             // encryptButton
             // 
-            this.encryptButton.Location = new System.Drawing.Point(310, 588);
+            this.encryptButton.Location = new System.Drawing.Point(354, 600);
             this.encryptButton.Name = "encryptButton";
             this.encryptButton.Size = new System.Drawing.Size(161, 36);
             this.encryptButton.TabIndex = 15;
@@ -181,7 +182,7 @@
             this.DestinationField.ItemHeight = 24;
             this.DestinationField.Location = new System.Drawing.Point(12, 481);
             this.DestinationField.Name = "DestinationField";
-            this.DestinationField.Size = new System.Drawing.Size(758, 100);
+            this.DestinationField.Size = new System.Drawing.Size(800, 100);
             this.DestinationField.TabIndex = 16;
             // 
             // destinationLabel
@@ -195,7 +196,7 @@
             // 
             // DecryptButton
             // 
-            this.DecryptButton.Location = new System.Drawing.Point(496, 588);
+            this.DecryptButton.Location = new System.Drawing.Point(543, 600);
             this.DecryptButton.Name = "DecryptButton";
             this.DecryptButton.Size = new System.Drawing.Size(161, 36);
             this.DecryptButton.TabIndex = 18;
@@ -205,7 +206,7 @@
             // 
             // openFolderButtonDestination
             // 
-            this.openFolderButtonDestination.Location = new System.Drawing.Point(785, 481);
+            this.openFolderButtonDestination.Location = new System.Drawing.Point(836, 481);
             this.openFolderButtonDestination.Name = "openFolderButtonDestination";
             this.openFolderButtonDestination.Size = new System.Drawing.Size(161, 36);
             this.openFolderButtonDestination.TabIndex = 20;
@@ -215,16 +216,16 @@
             // 
             // KeyTextBox
             // 
-            this.KeyTextBox.Location = new System.Drawing.Point(88, 591);
+            this.KeyTextBox.Location = new System.Drawing.Point(88, 603);
             this.KeyTextBox.Name = "KeyTextBox";
-            this.KeyTextBox.Size = new System.Drawing.Size(188, 29);
+            this.KeyTextBox.Size = new System.Drawing.Size(235, 29);
             this.KeyTextBox.TabIndex = 21;
             this.KeyTextBox.Enter += new System.EventHandler(this.KeyTextBox_Enter);
             // 
             // KeyLabel
             // 
             this.KeyLabel.AutoSize = true;
-            this.KeyLabel.Location = new System.Drawing.Point(12, 594);
+            this.KeyLabel.Location = new System.Drawing.Point(12, 606);
             this.KeyLabel.Name = "KeyLabel";
             this.KeyLabel.Size = new System.Drawing.Size(61, 24);
             this.KeyLabel.TabIndex = 22;
@@ -232,7 +233,7 @@
             // 
             // buttonClearSource
             // 
-            this.buttonClearSource.Location = new System.Drawing.Point(785, 392);
+            this.buttonClearSource.Location = new System.Drawing.Point(836, 392);
             this.buttonClearSource.Name = "buttonClearSource";
             this.buttonClearSource.Size = new System.Drawing.Size(161, 36);
             this.buttonClearSource.TabIndex = 23;
@@ -242,7 +243,7 @@
             // 
             // buttonClearDestinations
             // 
-            this.buttonClearDestinations.Location = new System.Drawing.Point(785, 545);
+            this.buttonClearDestinations.Location = new System.Drawing.Point(836, 545);
             this.buttonClearDestinations.Name = "buttonClearDestinations";
             this.buttonClearDestinations.Size = new System.Drawing.Size(161, 36);
             this.buttonClearDestinations.TabIndex = 24;
@@ -252,10 +253,9 @@
             // 
             // radioButtonAllow
             // 
-            this.radioButtonAllow.AutoSize = true;
-            this.radioButtonAllow.Location = new System.Drawing.Point(785, 73);
+            this.radioButtonAllow.Location = new System.Drawing.Point(836, 135);
             this.radioButtonAllow.Name = "radioButtonAllow";
-            this.radioButtonAllow.Size = new System.Drawing.Size(253, 28);
+            this.radioButtonAllow.Size = new System.Drawing.Size(150, 55);
             this.radioButtonAllow.TabIndex = 25;
             this.radioButtonAllow.TabStop = true;
             this.radioButtonAllow.Text = "Разрешить подключения";
@@ -264,22 +264,32 @@
             // 
             // radioButtonDeny
             // 
-            this.radioButtonDeny.AutoSize = true;
-            this.radioButtonDeny.Location = new System.Drawing.Point(785, 107);
+            this.radioButtonDeny.Location = new System.Drawing.Point(836, 73);
             this.radioButtonDeny.Name = "radioButtonDeny";
-            this.radioButtonDeny.Size = new System.Drawing.Size(251, 28);
+            this.radioButtonDeny.Size = new System.Drawing.Size(150, 56);
             this.radioButtonDeny.TabIndex = 26;
             this.radioButtonDeny.TabStop = true;
             this.radioButtonDeny.Text = "Запретить подключения";
             this.radioButtonDeny.UseVisualStyleBackColor = true;
             this.radioButtonDeny.CheckedChanged += new System.EventHandler(this.radioButtonConnections_CheckedChanged);
             // 
+            // CreateCryptoDevice
+            // 
+            this.CreateCryptoDevice.Location = new System.Drawing.Point(725, 600);
+            this.CreateCryptoDevice.Name = "CreateCryptoDevice";
+            this.CreateCryptoDevice.Size = new System.Drawing.Size(272, 36);
+            this.CreateCryptoDevice.TabIndex = 27;
+            this.CreateCryptoDevice.Text = "Зашифровать устройство";
+            this.CreateCryptoDevice.UseVisualStyleBackColor = true;
+            this.CreateCryptoDevice.Click += new System.EventHandler(this.CreateCryptoDevice_Click);
+            // 
             // main_window
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1069, 635);
+            this.ClientSize = new System.Drawing.Size(1007, 647);
+            this.Controls.Add(this.CreateCryptoDevice);
             this.Controls.Add(this.radioButtonDeny);
             this.Controls.Add(this.radioButtonAllow);
             this.Controls.Add(this.buttonClearDestinations);
@@ -343,6 +353,7 @@
         private System.Windows.Forms.Button buttonClearDestinations;
         private System.Windows.Forms.RadioButton radioButtonAllow;
         private System.Windows.Forms.RadioButton radioButtonDeny;
+        private System.Windows.Forms.Button CreateCryptoDevice;
     }
 }
 

@@ -12,6 +12,9 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.IO;
 using System.Security.Cryptography;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+
 
 
 namespace USB_Control
@@ -144,7 +147,7 @@ namespace USB_Control
             {
                 Regex r = new Regex(@"USBSTOR\\.*\\.*");
                 Match m = r.Match(enums.GetValue(valueName).ToString());
-                //Match m = r.Match(valueName);
+
                 if (m.Success == true)
                 {
                     current_devices.Add(enums.GetValue(valueName).ToString());
@@ -212,54 +215,6 @@ namespace USB_Control
         MessageBoxDefaultButton.Button1,
         MessageBoxOptions.DefaultDesktopOnly);
         }
-
-        //private void deny_connections_Click(object sender, EventArgs e)
-        //{
-        //    RegistryKey rkLocalMachine = Registry.LocalMachine;
-        //    RegistryKey enums = rkLocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Enum\USBSTOR", true);
-            
-        //    foreach (string USBClassKeyName in enums.GetSubKeyNames())
-        //    {
-        //        RegistryKey usb_classes = enums.OpenSubKey(USBClassKeyName, true);
-        //        foreach (string USBDeviceKeyName in usb_classes.GetSubKeyNames())
-        //        {
-        //            RegistryKey usb_device = usb_classes.OpenSubKey(USBDeviceKeyName, true);
-        //            foreach (string param in usb_device.GetValueNames())
-        //            {
-        //                usb_device.DeleteValue(param);
-        //            }
-        //        }
-        //    }
-
-        //    RegistryKey WinPolicies = rkLocalMachine.OpenSubKey(@"SOFTWARE\Policies\Microsoft\Windows", true);
-        //    RegistryKey DeviceInstall = get_key(WinPolicies, "DeviceInstall");
-        //    RegistryKey DeviceInstallRestrictions = get_key(DeviceInstall, "Restrictions");
-        //    DeviceInstallRestrictions.SetValue("DenyUnspecified", 1);
-        //}
-
-        //private void allow_connections_Click(object sender, EventArgs e)
-        //{
-        //    RegistryKey rkLocalMachine = Registry.LocalMachine;
-        //    RegistryKey enums = rkLocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Enum\USBSTOR", true);
-
-        //    foreach (string USBClassKeyName in enums.GetSubKeyNames())
-        //    {
-        //        RegistryKey usb_classes = enums.OpenSubKey(USBClassKeyName, true);
-        //        foreach (string USBDeviceKeyName in usb_classes.GetSubKeyNames())
-        //        {
-        //            RegistryKey usb_device = usb_classes.OpenSubKey(USBDeviceKeyName, true);
-        //            foreach (string param in usb_device.GetValueNames())
-        //            {
-        //                usb_device.DeleteValue(param);
-        //            }
-        //        }
-        //    }
-
-        //    RegistryKey WinPolicies = rkLocalMachine.OpenSubKey(@"SOFTWARE\Policies\Microsoft\Windows", true);
-        //    RegistryKey DeviceInstall = get_key(WinPolicies, "DeviceInstall");
-        //    RegistryKey DeviceInstallRestrictions = get_key(DeviceInstall, "Restrictions");
-        //    DeviceInstallRestrictions.SetValue("DenyUnspecified", 0);
-        //}
 
         private void add_device_Click(object sender, EventArgs e)
         {
@@ -370,24 +325,6 @@ namespace USB_Control
             System.Windows.Forms.Application.Exit();
         }
 
-        //private void dropField_DragEnter(object sender, DragEventArgs e)
-        //{
-        //    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-        //    foreach (string file in files)
-        //    {
-        //        SourceField.Items.Add(file);
-        //    }
-        //}
-
-        //private void dropField_DragDrop(object sender, DragEventArgs e)
-        //{
-        //    if (e.Data.GetDataPresent(DataFormats.FileDrop, false) == true)
-        //    {
-        //        e.Effect = DragDropEffects.All;
-        //    }
-        //}
-
         private void openFileButtonSource_Click(object sender, EventArgs e)
         {
             DialogResult result = openFileDialog.ShowDialog();
@@ -437,8 +374,6 @@ namespace USB_Control
                 string filePathDestination = DestinationField.Items[0].ToString();
                 foreach (string filePathSource in SourceField.Items)
                 {
-                    //EncryptFile(filePathSource, filePathDestination, key);
-                    //FileEncrypt(filePathSource, filePathDestination, KeyTextBox.Text);
                     AES_Encrypt(filePathSource, filePathDestination, key);
                 }
                 ShowMessage("Файлы зашифрованы!");
@@ -487,7 +422,6 @@ namespace USB_Control
         {
             DestinationField.Items.Clear();
         }
-
 
 
         private static void AES_Encrypt(string inputFile, string outputFile, byte[] passwordBytes)
@@ -659,6 +593,52 @@ namespace USB_Control
             KeyTextBox.Text = null;
             KeyTextBox.ForeColor = Color.Black;
         }
+
+        private void CreateCryptoDevice_Click(object sender, EventArgs e)
+        {
+            DialogResult result = folderBrowserDialog.ShowDialog();
+            string folderName = "";
+
+            // если папка выбрана и нажата клавиша `OK` - значит можно получить путь к папке
+            if (result == DialogResult.OK)
+            {
+                // запишем в нашу переменную путь к папке
+                folderName = folderBrowserDialog.SelectedPath;
+                if (Regex.Match(folderName, @"(.:)").Success)
+                    folderName = Regex.Match(folderName, @"(.:)").Groups[1].ToString();
+            }
+
+            if (folderName != "" && KeyTextBox.Text.Length >= 8 && KeyTextBox.Text != "от 8 символов")
+            {
+                CreateCryptoDevice.Text = "Выполняется...";
+
+                string powershellfilename = DateTime.Now.Ticks + ".ps1";
+                StreamWriter writer = new StreamWriter(powershellfilename);
+                writer.WriteLine($"Enable-BitLocker -MountPoint \"{folderName}\" -UsedSpaceOnly -Password (\"{KeyTextBox.Text}\" | ConvertTo-SecureString -AsPlainText -Force) -PasswordProtector");
+                writer.Flush();
+                writer.Close();
+
+                Process runBitLocker = new Process();
+                runBitLocker.StartInfo.FileName = @"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe";
+                runBitLocker.StartInfo.Arguments = "-executionpolicy Unrestricted -File " + powershellfilename;
+                runBitLocker.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                runBitLocker.Start();
+                runBitLocker.WaitForExit();
+                ShowMessage("Устройство зашифровано!");
+
+                Thread.Sleep(10000);
+                CreateCryptoDevice.Text = "Создать криптохранилище";
+
+            }
+            else
+            {
+                if (KeyTextBox.Text.Length < 8 || KeyTextBox.Text == "от 8 символов")
+                    ShowMessage("Длина ключа должна быть больше, либо равна 8 символам!");
+                if (folderName == "")
+                    ShowMessage("Выберите устройтво для шифрования!");
+            }
+        }
+
     }
 
 

@@ -35,7 +35,7 @@ namespace USB_Control
             RegistryKey WinPolicies = rkLocalMachine.OpenSubKey(@"SOFTWARE\Policies\Microsoft\Windows", true);
             RegistryKey DeviceInstall = get_key(WinPolicies, "DeviceInstall");
             RegistryKey DeviceInstallRestrictions = get_key(DeviceInstall, "Restrictions");
-            string DenyUnspecified = "default"; ;
+            string DenyUnspecified = "default";
 
             if (DeviceInstallRestrictions.GetValue("DenyUnspecified") != null)
                 DenyUnspecified = DeviceInstallRestrictions.GetValue("DenyUnspecified").ToString();
@@ -627,8 +627,8 @@ namespace USB_Control
                 ShowMessage("Устройство зашифровано!");
 
                 Thread.Sleep(10000);
-                CreateCryptoDevice.Text = "Создать криптохранилище";
-
+                CreateCryptoDevice.Text = "Зашифровать устройство";
+                File.Delete(powershellfilename);
             }
             else
             {
